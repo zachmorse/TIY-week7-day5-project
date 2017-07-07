@@ -20,38 +20,49 @@ router.get("/", (req, res) => {
     });
 });
 
-router.get("/addcar", (req, res) => {
-  res.render("addcar");
-});
-
 router.post("/addcar", (req, res) => {
   var carData = req.body;
   let newCarEntry = new Car(carData);
-  newCarEntry.save().then(() => {
-    res.redirect("/");
-  });
-});
-
-router.get("/updatecar/:id", (req, res) => {
-  Car.findById(req.params.id).then(foundCar => {
-    res.render("update", { userListing: foundCar });
-  });
-});
-
-router.post("/updatecar/:id", (req, res) => {
-  Car.updateOne({ _id: req.params.id }, req.body)
-    .then(updatedCar => {
-      res.redirect("/");
+  newCarEntry
+    .save()
+    .then(savedCar => {
+      res.send(savedCar);
     })
     .catch(err => {
       res.status(500).send(err);
     });
 });
 
-router.get("/deletecar/:id", (req, res) => {
+router.get("/:id", (req, res) => {
+  Car.findById(req.params.id)
+    .then(foundCar => {
+      res.send(foundCar);
+    })
+    .catch(err => {
+      res.status(500).send(err);
+    });
+});
+
+router.put("/updatecar/:id", (req, res) => {
+  Car.updateOne({ _id: req.params.id }, req.body)
+    .then(updatedCar => {
+      res.send(updatedCar);
+    })
+    .catch(err => {
+      res.status(500).send(err);
+    });
+});
+
+router.patch("/updatecar/:id", (req, res) => {
+  Car.updateOne({ _id: req.params.id }, req.body).then(patchedCar => {
+    res.send(patchedCar);
+  });
+});
+
+router.delete("/deletecar/:id", (req, res) => {
   Car.deleteOne({ _id: req.params.id })
     .then(() => {
-      res.redirect("/");
+      res.send("Listing Deleted");
     })
     .catch(err => {
       res.status(500).send(err);

@@ -10,7 +10,7 @@ mongoose.connect(dbURL);
 
 // router:
 
-router.get("/", (req, res) => {
+router.get("/cars", (req, res) => {
   Car.find()
     .then(foundCars => {
       res.send(foundCars);
@@ -20,7 +20,7 @@ router.get("/", (req, res) => {
     });
 });
 
-router.post("/addcar", (req, res) => {
+router.post("/cars", (req, res) => {
   var carData = req.body;
   let newCarEntry = new Car(carData);
   newCarEntry
@@ -33,7 +33,7 @@ router.post("/addcar", (req, res) => {
     });
 });
 
-router.get("/:id", (req, res) => {
+router.get("/cars/:id", (req, res) => {
   Car.findById(req.params.id)
     .then(foundCar => {
       res.send(foundCar);
@@ -43,7 +43,7 @@ router.get("/:id", (req, res) => {
     });
 });
 
-router.put("/updatecar/:id", (req, res) => {
+router.put("/cars/:id", (req, res) => {
   Car.updateOne({ _id: req.params.id }, req.body)
     .then(updatedCar => {
       res.send(updatedCar);
@@ -53,13 +53,13 @@ router.put("/updatecar/:id", (req, res) => {
     });
 });
 
-router.patch("/updatecar/:id", (req, res) => {
+router.patch("/cars/:id", (req, res) => {
   Car.updateOne({ _id: req.params.id }, req.body).then(patchedCar => {
     res.send(patchedCar);
   });
 });
 
-router.delete("/deletecar/:id", (req, res) => {
+router.delete("/cars/:id", (req, res) => {
   Car.deleteOne({ _id: req.params.id })
     .then(() => {
       res.send("Listing Deleted");
